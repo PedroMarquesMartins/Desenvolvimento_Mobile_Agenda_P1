@@ -1,16 +1,11 @@
 # desenvolvimento_mobile_p1
+Nome: João Pedro Marques Martins
+RGM: 802.366
 
-A new Flutter project.
+Projeto P1
 
-## Getting Started
+Este software foi desenvolvido como parte da Prova1 do sexto semestre de Engenharia de Software na diciplina de Programação para Dispositivos Móveis e tem como objetivo oferecer uma solução eficiente e intuitiva para a gestão de contatos telefônicos. Trata-se de um aplicativo desenvolvido em Flutter, projetado para atender às necessidades dos usuários que buscam uma ferramenta prática e moderna para organizar seus contatos.
 
-This project is a starting point for a Flutter application.
+Entre as principais funcionalidades do aplicativo estão o cadastro de novos contatos, a listagem completa com detalhes de cada contato, além de opções para editar e excluir informações já cadastradas. A interface é projetada com foco na usabilidade, oferecendo uma experiência fluida e amigável, permitindo que os usuários naveguem facilmente por todas as funções, de forma que o aplicativo siga padrões de qualidade que garantem uma experiência agradável, promovendo a satisfação dos usuários ao gerenciar suas agendas de contatos.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Neste primeiro momento, o aplicativo encontra-se em desenvolvimento e pode apresentar falhas.
