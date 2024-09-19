@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
+import '../Controllers/Principal.dart';
+
 class MyApp extends StatelessWidget{
 
   //O widget faz o acesso as funções interativas do aplicativo, portanto fica em Override.
   @override
-  Widget build(BuildContext context) {    //A classe MyApp inicia a classe principal, que fica responsável pelas funcionalidades principal.
+  Widget build(BuildContext context) {    //A classe MyApp inicia a classe principal, que fica responsável pelas funcionalidades principais.
     // TODO: implement build
     return MaterialApp(
-      //Aqui chama a principal()
+      home: Principal(),  //Chamando a Classe em home
     );
   }
 }

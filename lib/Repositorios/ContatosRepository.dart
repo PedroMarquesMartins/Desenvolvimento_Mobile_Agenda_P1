@@ -1,7 +1,7 @@
 import '../Entidades/Contato.dart';
 
 //Classe de repositório, que manipula os objetos de forma genérica.
-class Contatosrepository {
+class ContatosRepository {
   final List<Contato> contatos = [];  //Invoca a lista de contatos
 
 
