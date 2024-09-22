@@ -1,22 +1,21 @@
 import 'package:desenvolvimento_mobile_p1/Repositorios/ContatosRepository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../Entidades/Cadastro.dart';
 import '../Entidades/Contato.dart';
+import 'package:flutter/services.dart';
 
-//Esta classe é responsável por ler as inserções do usuário e associá-los as instâncias de suas devidas entidades, armazenando-as em memória
 class CadastroState extends State<Cadastro> {
-
-  //Criando as variáveis que receberão os campos de inserção
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController telController = TextEditingController();
   final ContatosRepository contatos;
+  bool EmailValido = true;
+  bool NomeValido = true;
+  bool TelValido = true;
 
-  CadastroState({required this.contatos}); //Associando ao contato. O required indica obrigatoriedade
+  CadastroState({required this.contatos});
 
-  //O widget a seguir tem a função de gerarar os campos de incersão, atribuindo as variáveis locais com os itens do objeto contato
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,34 +23,89 @@ class CadastroState extends State<Cadastro> {
         title: Text('Cadastro de Contatos'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0), //Campo
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              decoration: InputDecoration(labelText: 'Entre com nome'),
-              controller: nomeController,   //Atribuição a variavel local
+              decoration: InputDecoration(
+                labelText: 'Informe o nome',
+                errorText: NomeValido ? null : 'O nome não pode ser vazio',
+              ),
+              controller: nomeController,
+              onChanged: (value) {
+                setState(() {
+                  NomeValido = value.isNotEmpty;
+                });
+              },
             ),
             TextField(
-              //Assim sucessivamente
-              decoration: InputDecoration(labelText: 'Entre com o email'),
+              decoration: InputDecoration(
+                labelText: 'Informe o email',
+                errorText: EmailValido
+                    ? null
+                    : 'O email não pode ser vazio ou inválido',
+              ),
               controller: emailController,
+              keyboardType: TextInputType.emailAddress,
+              onChanged: (value) {
+                setState(() {
+                  EmailValido = value.isNotEmpty &&
+                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+                });
+              },
             ),
             TextField(
-              decoration: InputDecoration(labelText: 'Entre com o telefone'),
+              decoration: InputDecoration(
+                labelText: 'Informe o telefone',
+                errorText: TelValido ? null : 'Telefone inválido ou vazio',
+              ),
               controller: telController,
+              keyboardType: TextInputType.phone,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+                LengthLimitingTextInputFormatter(11),
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  String textoo = newValue.text;
+                  if (textoo.length >= 2) {
+                    textoo =
+                        '(${textoo.substring(0, 2)}) ${textoo.substring(2)}';
+                  }
+                  if (textoo.length > 10) {
+                    textoo =
+                        '${textoo.substring(0, 10)}-${textoo.substring(10, textoo.length)}';
+                  }
+                  return TextEditingValue(
+                    text: textoo,
+                    selection: TextSelection.collapsed(offset: textoo.length),
+                  );
+                }),
+              ],
             ),
             SizedBox(height: 20),
-
-            //Este é o actionEvent do botão salvar. Ele atribui os itens locais ao objeto contato.
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  contatos.addContatos(Contato(
+                  NomeValido = nomeController.text.isNotEmpty;
+                  TelValido = telController.text.isNotEmpty &&
+                      telController.text
+                              .replaceAll(RegExp(r'[\D]'), '')
+                              .length >=
+                          11;
+                  EmailValido = emailController.text.isNotEmpty &&
+                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$')
+                          .hasMatch(emailController.text);
+                });
+
+                if (NomeValido && EmailValido && TelValido) {
+                  setState(() {
+                    contatos.addContatos(Contato(
                       nome: nomeController.text,
                       email: emailController.text,
-                      tel: telController.text));
-                });
-                Navigator.pop(context);
+                      tel: telController.text,
+                    ));
+                  });
+                  Navigator.pop(context);
+                }
               },
               child: Text('Salvar'),
             ),
