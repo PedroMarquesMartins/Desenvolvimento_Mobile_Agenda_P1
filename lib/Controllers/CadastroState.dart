@@ -6,41 +6,45 @@ import '../Entidades/Contato.dart';
 import 'package:flutter/services.dart';
 
 class CadastroState extends State<Cadastro> {
+
+  //Criando instancias das incersões dos campos
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController telController = TextEditingController();
   final ContatosRepository contatos;
+
+  //Criando Variáveis de validação
   bool EmailValido = true;
   bool NomeValido = true;
   bool TelValido = true;
 
-  CadastroState({required this.contatos});
+  CadastroState({required this.contatos});  //Construtor
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {   //Este widget deve cadastrar os usuarios, validando as entradas e salvando-as na memória
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro de Contatos'),
+        title: Text('Cadastro de Contatos'),  //Titulo da tela
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              decoration: InputDecoration(
+              decoration: InputDecoration(    //Inserindo mensagens na tela de acordo com o campo
                 labelText: 'Informe o nome',
-                errorText: NomeValido ? null : 'O nome não pode ser vazio',
+                errorText: NomeValido ? null : 'O nome não pode ser vazio', //Mensagem de Erro
               ),
               controller: nomeController,
               onChanged: (value) {
                 setState(() {
-                  NomeValido = value.isNotEmpty;
+                  NomeValido = value.isNotEmpty;   //Verificando se o campo é vazio
                 });
               },
             ),
             TextField(
               decoration: InputDecoration(
-                labelText: 'Informe o email',
+                labelText: 'Informe o email',  //Solicitando dados
                 errorText: EmailValido
                     ? null
                     : 'O email não pode ser vazio ou inválido',
@@ -50,29 +54,31 @@ class CadastroState extends State<Cadastro> {
               onChanged: (value) {
                 setState(() {
                   EmailValido = value.isNotEmpty &&
-                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);    //Fazendo a máscara para email
                 });
               },
             ),
             TextField(
               decoration: InputDecoration(
                 labelText: 'Informe o telefone',
-                errorText: TelValido ? null : 'Telefone inválido ou vazio',
+                errorText: TelValido ? null : 'Telefone inválido ou vazio',   //Mais textos de interface
               ),
               controller: telController,
-              keyboardType: TextInputType.phone,
+              keyboardType: TextInputType.phone,   //Definindo o tipo de texto
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
                 LengthLimitingTextInputFormatter(11),
-                TextInputFormatter.withFunction((oldValue, newValue) {
+                TextInputFormatter.withFunction((oldValue, newValue) {   //Diferenciando as entradas novas e antigas
                   String textoo = newValue.text;
+
+                  //A seguir as estruturas condicionais IF farão a mascara e determinarão se a entrada é válida
                   if (textoo.length >= 2) {
                     textoo =
                         '(${textoo.substring(0, 2)}) ${textoo.substring(2)}';
                   }
                   if (textoo.length > 10) {
                     textoo =
-                        '${textoo.substring(0, 10)}-${textoo.substring(10, textoo.length)}';
+                        '${textoo.substring(0, 10)}-${textoo.substring(10, textoo.length)}';  //Validando tamanho do numero telefonico
                   }
                   return TextEditingValue(
                     text: textoo,
@@ -82,20 +88,21 @@ class CadastroState extends State<Cadastro> {
               ],
             ),
             SizedBox(height: 20),
-            ElevatedButton(
+            ElevatedButton(        //Criando botão Salvar
               onPressed: () {
                 setState(() {
-                  NomeValido = nomeController.text.isNotEmpty;
+                  NomeValido = nomeController.text.isNotEmpty;  //Verificando validade se não é vazio
                   TelValido = telController.text.isNotEmpty &&
                       telController.text
-                              .replaceAll(RegExp(r'[\D]'), '')
+                              .replaceAll(RegExp(r'[\D]'), '')       //Aplicando máscara
                               .length >=
                           11;
                   EmailValido = emailController.text.isNotEmpty &&
-                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$')
+                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$')      //Aplicando a máscara
                           .hasMatch(emailController.text);
                 });
 
+                //Se for válido o contato novo é salvo
                 if (NomeValido && EmailValido && TelValido) {
                   setState(() {
                     contatos.addContatos(Contato(

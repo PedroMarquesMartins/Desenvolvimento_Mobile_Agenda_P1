@@ -4,8 +4,8 @@ import '../Entidades/Contato.dart';
 import 'package:flutter/services.dart';
 
 class Editar extends StatefulWidget {
-  final ContatosRepository contatos;
-  final Contato contato;
+  final ContatosRepository contatos; //Repositorio é instanciado
+  final Contato contato; //contato a ser editado
 
   Editar({required this.contatos, required this.contato});
 
@@ -15,15 +15,20 @@ class Editar extends StatefulWidget {
 }
 
 class EditarState extends State<Editar> {
+
+  //Aqui temos instâncias e criação de variáveis, como na classe CadastroState
   final ContatosRepository contatos;
   final Contato contato;
   final TextEditingController nomeController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController telController = TextEditingController();
+
+  //Criando variáveis booleanas para validacao
   bool emailValido = true;
   bool nomeValido = true;
   bool telValido = true;
 
+  //Inicializa os campos com os dados do contato
   EditarState({required this.contatos, required this.contato}) {
     nomeController.text = contato.nome;
     emailController.text = contato.email;
@@ -37,18 +42,20 @@ class EditarState extends State<Editar> {
         title: Text('Editar Contato'),
       ),
       body: Padding(
+        // Espaçamento em volta dos campos
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               decoration: InputDecoration(
                 labelText: 'Nome',
-                errorText: nomeValido ? null : 'O nome não pode ser vazio',
+                // Mensagem de erro se inválido
+                errorText: nomeValido ? null : 'O nome não pode ser vazio',      //Mensagem caso informe nome vazio
               ),
               controller: nomeController,
               onChanged: (value) {
                 setState(() {
-                  nomeValido = value.isNotEmpty;
+                  nomeValido = value.isNotEmpty;  //Verificand se nao esta vazio
                 });
               },
             ),
@@ -56,15 +63,15 @@ class EditarState extends State<Editar> {
               decoration: InputDecoration(
                 labelText: 'Email',
                 errorText: emailValido
-                    ? null
-                    : 'O email não pode ser vazio ou inválido',
-              ),
+                    ? null : 'O email não pode ser vazio ou inválido',        //Mensagem de erro
+                ),
               controller: emailController,
+              //Teclado para email
               keyboardType: TextInputType.emailAddress,
               onChanged: (value) {
                 setState(() {
                   emailValido = value.isNotEmpty &&
-                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);
+                      RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value);    //Máscara para email
                 });
               },
             ),
@@ -77,12 +84,14 @@ class EditarState extends State<Editar> {
               keyboardType: TextInputType.phone,
               inputFormatters: [
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(11),
-                TextInputFormatter.withFunction((oldValue, newValue) {
+                LengthLimitingTextInputFormatter(11),             //Indicando limite maximo
+                TextInputFormatter.withFunction((oldValue, newValue) {        //Derivando a função dos dados antigos -> novos
                   String textoo = newValue.text;
+
+                  // Valida os campos antes de salvar
                   if (textoo.length >= 2) {
                     textoo =
-                        '(${textoo.substring(0, 2)}) ${textoo.substring(2)}';
+                        '(${textoo.substring(0, 2)}) ${textoo.substring(2)}';       //Segue as máscaras necessárias para validar telefone, assim como na classe de cadastro
                   }
                   if (textoo.length > 10) {
                     textoo =
@@ -112,15 +121,15 @@ class EditarState extends State<Editar> {
                           RegExp(r'^[\w-]+@([\w-]+\.)+[\w-]{2,4}$')
                               .hasMatch(emailController.text);
                     });
-
+//Se todos os campos forem válidos, atualiza o contato
                     if (nomeValido && emailValido && telValido) {
                       Contato updatedContato = Contato(
                         nome: nomeController.text,
                         email: emailController.text,
                         tel: telController.text,
                       );
-                      contatos.atualizarContato(contato, updatedContato);
-                      Navigator.pop(context, true);
+                      contatos.atualizarContato(contato, updatedContato); //Como o nome já diz, atualiza contato
+                      Navigator.pop(context, true); //Retorna à tela anterior
                     }
                   },
                   child: Text('Salvar'),

@@ -12,7 +12,8 @@ class ContatosRepository {
     _contatos.add(contato);
   }
 
-  void atualizarContato(Contato oldContato, Contato newContato) {   //Atualizando na tela os dados novos
+  //Atualizando na tela os dados novos utilizando do índice(contato antigo->novo)
+  void atualizarContato(Contato oldContato, Contato newContato) {
     final index = _contatos.indexOf(oldContato);
     if (index != -1) {
       _contatos[index] = newContato;
