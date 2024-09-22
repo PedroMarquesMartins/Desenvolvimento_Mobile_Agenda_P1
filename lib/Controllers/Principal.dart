@@ -3,41 +3,56 @@ import '../Entidades/Listagem.dart';
 import '../Repositorios/ContatosRepository.dart';
 import 'package:flutter/material.dart';
 
-class Principal extends StatelessWidget{
-  final ContatosRepository contatos = ContatosRepository();  //Criando estância do repositório
+class Principal extends StatefulWidget {
+  const Principal({super.key});
+
+  @override
+  _PrincipalState createState() => _PrincipalState();
+}
+
+class _PrincipalState extends State<Principal> {
+  final ContatosRepository contatos = ContatosRepository();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:Text('Bem-Vindo a Agenda!'),  //Nesta parte indico o titlo da tela principal
+        title: Text(
+          'Bem-Vindo à Agenda Telefônica',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
       ),
-    body: Column(
-      children: [
-        ElevatedButton(        //Criando botao de Cadastro de contatos
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:(context)=>Cadastro(contatos:contatos),   //Indicando o construtor á classe Cadastro, com a função de cadastar novos contatos
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Center(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Cadastro(contatos: contatos),
+                    ),
+                  );
+                  setState(() {});
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                  child: Text(
+                    "Cadastrar Novo Contato",
+                    style: TextStyle(fontSize: 18),
+                  ),
+                ),
               ),
-            );
-          },
-          child: Text("Cadastro"),
+            ),
+            Expanded(
+              child: Listagem(contatos: contatos), // Usando a classe Listagem
+            ),
+          ],
         ),
-        ElevatedButton(
-          onPressed: (){         //OnPressed indica a função o qual o evento ativa
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder:(context)=>Listagem(contatos:contatos),       //Neste caso, chama a listagem
-              ),
-            );
-          },
-          child: Text("Listar"),
-        ),
-      ],
-    ),
+      ),
     );
   }
 }
