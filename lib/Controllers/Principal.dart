@@ -11,7 +11,7 @@ class Principal extends StatefulWidget {
 }
 
 
-//AClasse _PrincipalState é privada e nela a listagem será invocada, além de adicionar um botao de cadastro de novos contatos
+//A Classe _PrincipalState é privada e nela a listagem será invocada, além de adicionar um botao de cadastro de novos contatos
 class _PrincipalState extends State<Principal> {
   final ContatosRepository contatos = ContatosRepository();
 
@@ -21,7 +21,7 @@ class _PrincipalState extends State<Principal> {
       appBar: AppBar(
         title: Text(
           'Bem-Vindo à Agenda Telefônica',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),  //Personalizand interface do texto
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),  //Personalizando interface do texto
         ),
         centerTitle: true,
       ),
