@@ -2,6 +2,7 @@ import 'package:desenvolvimento_mobile_p1/Repositorios/ContatosRepository.dart';
 import 'package:flutter/material.dart';
 import '../Entidades/Contato.dart';
 import 'package:flutter/services.dart';
+import '../Controllers/ExcluirState.dart';
 
 class Editar extends StatefulWidget {
   final ContatosRepository contatos; //Repositorio é instanciado
@@ -42,20 +43,20 @@ class EditarState extends State<Editar> {
         title: Text('Editar Contato'),
       ),
       body: Padding(
-        // Espaçamento em volta dos campos
+        //Espaçamento em volta dos campos
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               decoration: InputDecoration(
                 labelText: 'Nome',
-                // Mensagem de erro se inválido
+                //Mensagem de erro se inválido
                 errorText: nomeValido ? null : 'O nome não pode ser vazio',      //Mensagem caso informe nome vazio
               ),
               controller: nomeController,
               onChanged: (value) {
                 setState(() {
-                  nomeValido = value.isNotEmpty;  //Verificand se nao esta vazio
+                  nomeValido = value.isNotEmpty;  //Verificando se nao esta vazio
                 });
               },
             ),
@@ -136,7 +137,11 @@ class EditarState extends State<Editar> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Lógica para excluir (sem funcionalidade por enquanto)
+                    // Lógica para excluir
+                    showDialog(
+                      context: context,
+                      builder: (context) => ExcluirState(contatos: contatos, contato: contato),
+                    );
                   },
                   child: Text('Excluir'),
                 ),

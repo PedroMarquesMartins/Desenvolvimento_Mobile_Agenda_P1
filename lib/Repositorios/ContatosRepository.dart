@@ -19,4 +19,9 @@ class ContatosRepository {
       _contatos[index] = newContato;
     }
   }
+
+  //Exclusao
+  void removerContato(Contato contato) {
+    _contatos.remove(contato);
+  }
 }
