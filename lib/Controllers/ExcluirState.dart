@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import '../Entidades/Contato.dart';
 import '../Repositorios/ContatosRepository.dart';
+import '../Dao/Dados.dart';  // Importa a classe Dados para acessar o método de remover
 
 class ExcluirState extends StatelessWidget {
   final ContatosRepository contatos;
   final Contato contato;
+  final Dados dados = Dados();  // Instancia a classe Dados
 
   //Esta classe tem a função de excluir contatos desejados
 
@@ -23,10 +25,11 @@ class ExcluirState extends StatelessWidget {
           child: Text('Cancelar'),
         ),
         TextButton(
-          onPressed: () {
-            contatos.removerContato(contato); //Remove o contato
+          onPressed: () async {
+            await dados.removerContato(contato.id!);  // Remove o contato do banco de dados
+            contatos.removerContato(contato);  // Remove o contato do repositório
             Navigator.pop(context);
-            Navigator.pop(context, true); //Sai da tela de edição após exclusão
+            Navigator.pop(context, true); // Sai da tela de edição após exclusão
           },
           child: Text('Sim'),
         ),
