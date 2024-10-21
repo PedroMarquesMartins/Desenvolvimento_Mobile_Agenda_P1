@@ -3,14 +3,18 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../Entidades/Contato.dart';
+import '../Entidades/Usuario.dart';
 
 
 class Dados {
   Future<Database> initializeDB() async {
     String path = join(await getDatabasesPath(), 'meu_banco.db');
     return await openDatabase(path, onCreate: (db, version) {
-      return db.execute(
+      db.execute(
         "CREATE TABLE contato(id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, tel TEXT)",
+      );
+      db.execute( //Nova query para usuario de login
+        "CREATE TABLE usuario(id INTEGER PRIMARY KEY AUTOINCREMENT, usuario TEXT, senha TEXT)", // Tabela de login
       );
     }, version: 1);
   }
@@ -47,5 +51,25 @@ class Dados {
       where: 'id = ?',
       whereArgs: [contato.id],
     );
+  }
+
+  //Nova função para cadastrar novos usuários que será chamada no CadastroUsuarioState()
+  Future<void> cadastrarUsuario(Usuario usuario) async {
+    final Database db = await initializeDB();
+    await db.insert('usuario', usuario.toMap());
+
+  }
+
+  //Função para buscar no banco os dados indicados, que retorna obrigatoriamente o resultado
+  Future<bool> validarLogin(String usuario, String senha) async {
+    final Database db = await initializeDB();
+
+    //Inserção da query no banco
+    final List<Map<String, dynamic>> exito = await db.query(
+      'usuario',
+      where: 'usuario = ? AND senha = ?',
+      whereArgs: [usuario, senha],
+    );
+    return exito.isNotEmpty;
   }
 }
