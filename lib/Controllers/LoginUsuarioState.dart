@@ -3,6 +3,7 @@ import 'package:projeto_cadastro/Controllers/CadastroUsuarioState.dart';
 import 'package:projeto_cadastro/Controllers/Principal.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Dao/Dados.dart';
+import 'Autenticacao/Token.dart';
 
 
 //classe login responsável por validar a entrada do usuário
@@ -55,9 +56,14 @@ class LoginState extends State<LoginUsuarioState> {
                 });
                 if (loginValido) {
 
-                  //Salva o token no sharedPreferences
-                  SharedPreferences prefers = await SharedPreferences.getInstance();
-                  prefers.setString('token', usuario);
+                  //Salva o token no sharedPreferences aqui
+                  bool sucesso = await salvarDados('token', usuario);
+
+                  if (sucesso) {
+                    print('Token salvo com sucesso!');
+                  } else {
+                    print('Falha ao salvar o token.');
+                  }
 
                   //Para a tela principal
                   Navigator.pushReplacement(
