@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:projeto_cadastro/Controllers/CadastroUsuarioState.dart';
 import 'package:projeto_cadastro/Controllers/Principal.dart';
+import 'package:projeto_cadastro/Entidades/Usuario.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../Dao/Dados.dart';
+import 'Autenticacao/SecureStorage.dart';
+import 'Autenticacao/SecureStorageAux.dart';
 import 'Autenticacao/Token.dart';
 
 
@@ -54,16 +57,13 @@ class LoginState extends State<LoginUsuarioState> {
                 setState(() {
                   loginValido = isValido;
                 });
+
+
                 if (loginValido) {
-
                   //Salva o token no sharedPreferences aqui
-                  bool sucesso = await salvarDados('token', usuario);
-
-                  if (sucesso) {
-                    print('Token salvo com sucesso!');
-                  } else {
-                    print('Falha ao salvar o token.');
-                  }
+                  Usuario usuarioLocal = Usuario(usuario: usuario, senha: senha);
+                  String token = SecuredStorage().geraToken(usuarioLocal);
+                  await SecureStorageAux.saveToken(token);
 
                   //Para a tela principal
                   Navigator.pushReplacement(

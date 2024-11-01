@@ -1,4 +1,10 @@
-import 'package:shared_preferences/shared_preferences.dart';
+/*import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+  NÃO ESTÁ EM USO!
+
+
 
 // Função para salvar dados
 Future<bool> salvarDados(String chave, String valor) async {
@@ -23,3 +29,4 @@ Future<void> removerDados(String chave) async {
   final prefs = await SharedPreferences.getInstance();
   await prefs.remove(chave);
 }
+*/
